@@ -2,7 +2,6 @@ import string
 import random
 import streamlit as st
 import re
-import pyperclip
 
 # Streamlit UI Setup
 st.set_page_config(page_title="🔐 Secure Password Generator", layout="centered")
@@ -52,11 +51,11 @@ def check_password_strength(password):
 
     # Strength Levels
     if score == 5:
-        return "✅ **Strong Password!** 🔥", "Strong", score
+        return "✅ **Strong Password!** 🟢", "Strong", score
     elif score >= 3:
-        return "⚠️ **Moderate Password.** 🔄", "Moderate", score
+        return "⚠️ **Moderate Password.** 🟡", "Moderate", score
     else:
-        return "❌ **Weak Password!** 🚨", "Weak", score
+        return "❌ **Weak Password!** 🔴", "Weak", score
 
 # Streamlit UI Elements
 st.title("🔒 Secure Password Generator & Strength Checker")
@@ -73,19 +72,12 @@ if password_input:
 st.subheader("🔑 **Generate a Strong Password**")
 password_length = st.slider("📏 Select Password Length:", min_value=8, max_value=20, value=12)
 
-# Password storage
-generated_password = ""
-
 if st.button("🎲 **Generate Password**"):
     generated_password = generate_password(password_length)
     st.success("🔐 **Generated Password:**")
-    st.code(generated_password, language="plaintext")
-
-    # Copy Button (Only if a password is generated)
-    if generated_password:
-        if st.button("📋 **Copy Password**"):
-            pyperclip.copy(generated_password)
-            st.success("✅ Password copied to clipboard!")
+    
+    # Using text_input instead of st.code for easier copying
+    st.text_input("Copy your password:", value=generated_password, disabled=True)
 
 # Additional Security Tips
 st.warning("⚠️ **Never share your password with anyone!**")
